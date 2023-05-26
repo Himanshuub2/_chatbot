@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+@layer components {
+  .message-right {
+    @apply w-3/4 flex flex-col h-auto mb-2 rounded-full p-4 pr-6 rounded-br-none font-Book-Mars text-white;
+  }
+
+  .message-left{
+    @apply w-3/4 flex flex-col h-auto mb-2 rounded-full p-4 pl-6 rounded-tl-none font-Book-Mars text-white;
+  }
+}
+
+
+@layer utilities {
+  @variants responsive {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    
+    border-radius: 20px;
+    border: 3px solid #f6f7ed;
+  }
+}
+
+
+@font-face {
+  font-family: 'MarsCentra-Book';
+  src: local('MarsCentra-Book'), url(./fonts/MarsCentra-Book.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'MarsCentra-Bold';
+  src: local('MarsCentra-Bold'), url(./fonts/MarsCentra-Bold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'MarsCentra-Extrabold';
+  src: local('MarsCentra-Extrabold'), url(./fonts/MarsCentra-Extrabold.ttf) format('truetype');
+}
+
+
+/* ------Graph ModeBar CSS------------ */
+.plot {
+  display: flex;
+  flex-direction: column;
+  left:6%;
+  /* top:20%; */
+
+ 
+}
+
+
+svg{
+  display: inherit;
+  /* top:-10%; */
+
+}
+
+.js-plotly-plot .plotly .modebar{
+  margin-top:65px;
+  left:12%;
+  position: absolute;
+  margin-left: 60px;
+  z-index: 1;
+ 
+  
+}
+
+.js-plotly-plot .plotly .modebar .modebar-group{
+ padding-left:2px;
+ 
+  
+}
+
+.tabpanel{
+  padding:0px;
+}
+/* 
+.js-plotly-plot .plotly .modebar {
+  top:50px;
+  
+  /* padding:15px; */
+  /* transform: translateX(-50%); */
+
+ 
+
+/* }  */
+
+.modebar-group{
+  padding-left:2px;
+}
+
+a.modebar-btn {
+  font-size: 20px !important;
+  
+  
+}
+
+
+/* to change graph position */
+
+.js-plotly-plot{
+  position:  absolute !important;
+   /* top:-38px; */
+   top:-90px;
+   z-index: -1;
+   left:8%;
+   
+  /* left:-5px; */
+} 
+
+
+/* ----Side drawer Image CSS -----*/
+
+
+.customCSS{
+  width:120px;
+  height:76px;
+  position: relative;
+  opacity:0.5;
+  border:1px solid white;
+ 
+}
+
+.customCSS:hover{
+  cursor: pointer;
+  transform:scale3d(1.1,1.1,1.1)
+  
+}
+
+.text {
+  left: 25;
+  top:50;
+  position:absolute;
+  text-align:center;
+  color:white;
+  font-weight: 500;
+  
+}
+
+.text:hover{
+  cursor:pointer;
+ 
+}
+
+
+
+#input-field::placeholder{
+
+  color:#89969F;
+  font-size: 2.5vmin;
+  text-align: center;
+}
+
+#input-field:focus{
+  outline: none !important;
+  border:1px solid #04274e;
+  color:#89969F;
+  padding-left: 5%;
+  font-size: 2.5vmin;
+
+ 
+}
+
+
+#input-field:focus::placeholder{
+  color:transparent;
+}

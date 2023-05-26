@@ -1,0 +1,67 @@
+variables:
+  ImageName: 'dna-padle-workday-chatbot-project-fe'
+  RegName: 'workdaychatbotdevconreg.azurecr.io'
+
+stages:
+- stage: Build
+  jobs:
+    - job: Build
+      displayName: 'Build'
+      steps:
+      - task: Docker@2
+        displayName: 'Build MyProject image'
+        inputs:
+          repository: '$(ImageName)'
+          command: build
+          Dockerfile: Dockerfile
+          tags: $(Build.BuildId)
+          
+      - task: Docker@2
+        displayName: 'Save image to TAR'
+        inputs:
+          repository: '$(ImageName)'
+          command: save
+          arguments: '--output $(build.artifactstagingdirectory)/$(ImageName).image.tar $(ImageName):$(Build.BuildId)'
+          addPipelineData: false
+  
+      - task: PublishPipelineArtifact@1
+        displayName: 'Publishing Image as Pipeline Artifact'
+        inputs:
+          path: $(build.artifactstagingdirectory)
+          artifact: ContainerImage
+
+- stage: Publish
+  displayName: 'Publish'
+  jobs:
+    - job: Publish
+      pool:
+        name: DNA-selfhosted-agent-pool
+        demands:
+          - agent.name -equals padledeveus2jumpbox
+      displayName: 'Push to container registry'
+      steps:
+      - task: CmdLine@2
+        displayName: 'Remove unneeded files'
+        inputs:
+          script: 'rm -rf  $(Build.Repository.LocalPath)/ContainerImage/'
+      - task: CmdLine@2
+        inputs:
+          script: 'docker system prune -a --force' 
+      - task: DownloadPipelineArtifact@1
+        inputs:
+          buildType: 'current'
+          targetPath: $(Build.Repository.LocalPath)
+      - task: Docker@2
+        displayName: 'Load Image from Tar'
+        inputs:
+          command: load
+          arguments: '--input $(Build.Repository.LocalPath)/ContainerImage/$(ImageName).image.tar'
+      - task: CmdLine@2
+        inputs:
+          script: docker tag $(ImageName):$(Build.BuildId) $(RegName)/$(ImageName):$(Build.BuildId)
+      - task: Docker@0
+        displayName: 'Push an image'
+        inputs:
+          azureSubscription: 'DEV-WD-CHATBOT-SC'
+          azureContainerRegistry: '{"loginServer":"workdaychatbotdevconreg.azurecr.io", "id" : "/subscriptions/2fbbf282-e31c-4e3f-a0ab-7baac00c450b/resourceGroups/RG-WORKDAYCHATBOT-DEV/providers/Microsoft.ContainerRegistry/registries/WORKDAYCHATBOTdevconreg"}'
+          action: 'Push an image'
